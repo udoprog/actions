@@ -1,0 +1,19 @@
+name: 'trug-action'
+description: 'GitHub action that installs trug'
+author: 'udoprog'
+
+inputs:
+  version:
+    description: 'Version (release tag) of trug to install, or `latest`.'
+    default: 'latest'
+  token:
+    description: 'GitHub token used to look up the latest release.'
+    default: ${{ github.token }}
+
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'package'
+  color: 'orange'
