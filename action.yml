@@ -1,0 +1,16 @@
+name: 'kick-action'
+description: 'GitHub action that installs kick'
+author: 'udoprog'
+
+inputs:
+  version:
+    description: 'Version of kick to install. Defaults to whatever is set for this branch.'
+    default: '2026-05-04'
+
+runs:
+  using: 'node24'
+  main: 'dist/index.js'
+
+branding:
+  icon: 'package'
+  color: 'orange'
