@@ -38,6 +38,35 @@ function detect(): Detect {
     throw new Error(`Unsupported platform \`${process.platform}\``);
 }
 
+async function latest(token: string): Promise<string> {
+    const headers: Record<string, string> = {
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'kick-action',
+    };
+
+    if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+    }
+
+    const response = await fetch('https://api.github.com/repos/udoprog/kick/releases/latest', {headers});
+
+    if (response.status === 404) {
+        throw new Error('kick has no published release; set `version` to a tag');
+    }
+
+    if (!response.ok) {
+        throw new Error(`Looking up the latest kick release failed: ${response.status} ${response.statusText}`);
+    }
+
+    const release = await response.json() as {tag_name?: string};
+
+    if (!release.tag_name) {
+        throw new Error('Latest kick release has no tag');
+    }
+
+    return release.tag_name;
+}
+
 async function download(tag: string): Promise<string> {
     const arch = detect_arch();
     const { platform, ext, method } = detect();
@@ -57,10 +86,15 @@ async function download(tag: string): Promise<string> {
 }
 
 async function innerMain() {
-    const tag = await core.getInput("version");
+    let tag = core.getInput("version");
 
     if (!tag) {
         throw new Error("Could not determine version of kick to use");
+    }
+
+    if (tag === 'latest') {
+        tag = await latest(core.getInput("token") || process.env.GITHUB_TOKEN || '');
+        core.info(`Latest release is '${tag}'`);
     }
 
     core.info(`Downloading 'kick' from tag '${tag}'`);

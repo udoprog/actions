@@ -8,8 +8,13 @@ GitHub action that installs [`kick`].
 
 ### `version`
 
-**Optional** The `kick` release tag to install, such as `2026-05-04`. It must
-match a tagged release; `latest` is not supported. Defaults to `2026-05-04`.
+**Optional** The `kick` release tag to install, such as `2026-05-04`. Defaults to
+`latest`, which resolves the newest release through the GitHub API.
+
+### `token`
+
+**Optional** GitHub token used to look up the latest release. Defaults to
+`github.token`.
 
 ## Example usage
 

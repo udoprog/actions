@@ -4,8 +4,11 @@ author: 'udoprog'
 
 inputs:
   version:
-    description: 'Version of kick to install. Defaults to whatever is set for this branch.'
-    default: '2026-05-04'
+    description: 'Version (release tag) of kick to install, or `latest`.'
+    default: 'latest'
+  token:
+    description: 'GitHub token used to look up the latest release.'
+    default: ${{ github.token }}
 
 runs:
   using: 'node24'
